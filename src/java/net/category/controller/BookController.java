@@ -10,9 +10,11 @@ import net.category.service.file.FileService;
 import net.category.service.genre.GenreService;
 import net.category.service.rating.RatingService;
 import net.category.service.user.UserService;
+import net.category.validator.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,9 @@ import java.util.List;
  */
 @Controller
 public class BookController {
+
+    @Autowired
+    private BookValidator bookValidator;
 
     @Autowired
     private BookService bookService;
@@ -61,35 +66,56 @@ public class BookController {
         model.addAttribute("listGenres", genreService.listGenres());
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("isLogin",userService.isLogin());
+        model.addAttribute("isBooks",true);
     }
 
-    @RequestMapping(value = "/books/add", method = RequestMethod.POST)
-    public String addBook(@ModelAttribute("book") Book book, @RequestParam("file_book") MultipartFile fileBook,
-                          @RequestParam("file_image") MultipartFile fileImage,
+    @RequestMapping(value = "/books/edit", method = RequestMethod.POST)
+    public String editBook(@ModelAttribute("book") Book book, @RequestParam("file_book") MultipartFile fileBook,
+                          @RequestParam("file_image") MultipartFile fileImage,BindingResult bindingResult,
                           @RequestParam("genre_id") Long genre){
+        bookValidator.validate(book,bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "redirect:/bookdata/" + book.getId();
+        }
         book.setGenre(genreService.findById(genre));
         Book originBook = bookService.getBookById(book.getId());
+        book.setRatings(originBook.getRatings());
         if(!fileBook.isEmpty()) {
-            if(book.getId() != 0)
-                fileManager.deleteFile(originBook.getContentUrl());
+            fileManager.deleteFile(originBook.getContentUrl());
             String content = fileManager.writeBook(fileBook, book.getName());
             book.setContentUrl(content);
         }
         if(!fileImage.isEmpty()) {
-            if(book.getId() != 0)
-                fileManager.deleteFile(originBook.getImageUrl());
+            fileManager.deleteFile(originBook.getImageUrl());
             String content = fileManager.writeBookImage(fileImage, book.getName());
             book.setImageUrl(content);
         }
-        if(book.getId() == 0){
-            bookService.addBook(book);
-        }else {
-            if(fileBook.isEmpty())
-                book.setContentUrl(originBook.getContentUrl());
-            if(fileImage.isEmpty())
-                book.setImageUrl(originBook.getImageUrl());
-            bookService.updateBook(book);
+        if(fileBook.isEmpty())
+            book.setContentUrl(originBook.getContentUrl());
+        if(fileImage.isEmpty())
+            book.setImageUrl(originBook.getImageUrl());
+        bookService.updateBook(book);
+        return "redirect:/bookdata/" + book.getId();
+    }
+
+    @RequestMapping(value = "/books/add", method = RequestMethod.POST)
+    public String addBook(@ModelAttribute("book") Book book, @RequestParam("file_book") MultipartFile fileBook,
+                          @RequestParam("file_image") MultipartFile fileImage,BindingResult bindingResult,
+                          @RequestParam("genre_id") Long genre,Model model){
+        bookValidator.validate(book,bindingResult);
+        if (bindingResult.hasErrors() || fileBook.isEmpty()) {
+            return "redirect:/books";
         }
+        book.setGenre(genreService.findById(genre));
+        if(!fileBook.isEmpty()) {
+            String content = fileManager.writeBook(fileBook, book.getName());
+            book.setContentUrl(content);
+        }
+        if(!fileImage.isEmpty()) {
+            String content = fileManager.writeBookImage(fileImage, book.getName());
+            book.setImageUrl(content);
+        }
+            bookService.addBook(book);
         return "redirect:/books";
     }
 
@@ -132,6 +158,7 @@ public class BookController {
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("listGenres", genreService.listGenres());
         model.addAttribute("book", bookService.getBookById(id));
+        model.addAttribute("isBookData",true);
         int userRate = 0;
         if(ratingService.findByBookAndUser(bookService.getBookById(id),userService.getCurrentUser()) != null)
             userRate = (int)ratingService.findByBookAndUser(bookService.getBookById(id),userService.getCurrentUser()).getRating();

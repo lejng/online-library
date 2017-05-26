@@ -62,6 +62,21 @@
                 <form:errors path="surname"></form:errors>
             </div>
         </spring:bind>
+        <spring:bind path="city">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="city" class="form-control" placeholder="City"
+                            autofocus="true"></form:input>
+                <form:errors path="city"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="country">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="country" class="form-control" placeholder="Country"
+                            autofocus="true"></form:input>
+                <form:errors path="country"></form:errors>
+            </div>
+        </spring:bind>
 
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">

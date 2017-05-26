@@ -43,25 +43,14 @@
     <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-9">
-
-
                 <h1>Books</h1>
-
+                <div id="books">
                     <c:if test="${!empty listBooks}">
                             <c:forEach items="${listBooks}" var="book">
 
                                 <div class="card card-block" style="margin-top:20px" >
                                     <h3 class="card-title"><a href="<c:url value='/bookdata/${book.id}'/>" class="card-link">${book.name}</a></h3>
-                                    <div class="row">
-                                        <div class="col-sm-6">
                                             <%@include file="_book.jsp" %>
-                                            <p>
-                                                <c:if test="${isAdmin}">
-                                                    <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/remove/${book.id}'/>">Delete</a>&nbsp; &nbsp;
-                                                </c:if>
-                                            </p>
-                                        </div>
-                                    </div>
                                 </div>
 
                             </c:forEach>
@@ -70,7 +59,7 @@
                         <p>Books not found</p>
                     </c:if>
 
-
+                </div>
      </div><!--/.col-xs-12.col-sm-9-->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
@@ -99,13 +88,13 @@
             </div>
             <div class="modal-body">
                 <h3>Add</h3>
-                <form action="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/books/add" method="post" commandName="book" id ="nameform" enctype="multipart/form-data">
+                <form action="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/books/add" method="POST"  commandName="book"  id="form_add_book" enctype="multipart/form-data">
                     <table>
                         <tr>
-                            <td>Name</td> <td><input type="text" name="name" style="width:200px" ></td>
+                            <td>Name</td> <td><input type="text" name="name" style="width:200px" required minlength="3" ></td>
                         </tr>
                         <tr>
-                            <td>Author</td> <td><input type="text" name="author" style="width:200px"  ></td>
+                            <td>Author</td> <td><input type="text" name="author" style="width:200px" required minlength="3" ></td>
                         </tr>
 
                         <tr>
@@ -119,7 +108,7 @@
                         </tr>
 
                         <tr>
-                            <td>Description</td> <td><textarea name="description" style="width:200px" ></textarea></td>
+                            <td>Description</td> <td><textarea name="description" style="width:200px" required minlength="10"></textarea></td>
                         </tr>
                         <tr>
                             <td>Book</td> <td><input type="file" class="button" name="file_book" required></td>
@@ -132,7 +121,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button  class="btn btn-primary" type="submit" form="nameform">Add</button>
+                <button  class="btn btn-primary" form="form_add_book" >Add</button>
             </div>
         </div>
     </div>

@@ -12,4 +12,6 @@
     <p class="card-text"><strong>Name: </strong> ${user.name}</p>
     <p class="card-text"><strong>Surname: </strong> ${user.surname}</p>
     <p class="card-text"><strong>Email: </strong> ${user.email}</p>
+    <p class="card-text"><strong>City: </strong> ${user.city}</p>
+    <p class="card-text"><strong>Country: </strong> ${user.country}</p>
 </div>

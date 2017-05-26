@@ -31,6 +31,27 @@ public class UserValidator implements Validator {
         if (user.getEmail().length() < 8 || user.getEmail().length() > 32 || !user.getEmail().contains("@")) {
             errors.rejectValue("email", "Size.userForm.email");
         }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "city", "Required");
+        if (user.getEmail().length() < 3 || user.getEmail().length() > 50 ) {
+            errors.rejectValue("city", "Field.Incorrect");
+        }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "country", "Required");
+        if (user.getEmail().length() < 3 || user.getEmail().length() > 50 ) {
+            errors.rejectValue("country", "Field.Incorrect");
+
+        }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Required");
+        if (user.getEmail().length() < 3 || user.getEmail().length() > 50 ) {
+            errors.rejectValue("name", "Field.Incorrect");
+        }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "surname", "Required");
+        if (user.getEmail().length() < 3 || user.getEmail().length() > 50 ) {
+            errors.rejectValue("surname", "Field.Incorrect");
+
+        }
 
         if (userService.findByEmail(user.getEmail()) != null) {
             errors.rejectValue("email", "Duplicate.userForm.email");

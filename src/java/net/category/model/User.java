@@ -28,11 +28,33 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
+
     @Column(name = "imageUrl")
     private String imageUrl;
 
     @Transient
     private String confirmPassword;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public String getImageUrl() {
         return imageUrl;

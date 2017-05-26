@@ -59,10 +59,16 @@
                     <input type="hidden" value="${user.id}" name="id" id="update_dialog_id">
                     <table>
                         <tr>
-                            <td>Name</td> <td><input value="${user.name}" type="text" style="width:200px"    name="name" ></td>
+                            <td>Name</td> <td><input value="${user.name}" required minlength="3" type="text" style="width:200px"    name="name" ></td>
                         </tr>
                         <tr>
-                            <td>Surname</td> <td><input type="text" value="${user.surname}" style="width:200px" name="surname"></td>
+                            <td>Surname</td> <td><input type="text" value="${user.surname}" required minlength="3" style="width:200px" name="surname"></td>
+                        </tr>
+                        <tr>
+                            <td>City</td> <td><input value="${user.city}" type="text" style="width:200px" required minlength="3"   name="city" ></td>
+                        </tr>
+                        <tr>
+                            <td>Country</td> <td><input type="text" value="${user.country}" style="width:200px" required minlength="3" name="country"></td>
                         </tr>
                         <tr>
                             <td>Avatar</td> <td><input type="file" class="button" name="file_image" ></td>

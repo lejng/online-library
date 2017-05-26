@@ -47,15 +47,7 @@
 
   <div class="card card-block w-75" style="margin-top:20px" >
     <h3 class="card-title">${book.name}</h3>
-    <div class="row">
-      <div class="col-sm-6">
         <%@include file="_book.jsp" %>
-        <p class="card-text"><strong>About: </strong><br> ${book.description}</p>
-        <p>
-            <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/download/${book.id}'/>">Download</a>&nbsp; &nbsp;
-        </p>
-      </div>
-    </div>
   </div>
 
   <c:if test="${isLogin}">
@@ -98,14 +90,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="/books/add" method="post" commandName="book" id="nameform" enctype="multipart/form-data">
+        <form action="/books/edit" method="post" commandName="book" id="nameform" enctype="multipart/form-data">
           <input type="hidden" value="${book.id}" name="id" id="update_dialog_id">
           <table>
             <tr>
-              <td>Name</td> <td><input type="text" value="${book.name}" name="name" style="width:200px" ></td>
+              <td>Name</td> <td><input type="text" value="${book.name}" name="name" style="width:200px" minlength="3" required ></td>
             </tr>
             <tr>
-              <td>Author</td> <td><input type="text" value="${book.author}" name="author" style="width:200px"  ></td>
+              <td>Author</td> <td><input type="text" value="${book.author}" name="author" style="width:200px" minlength="3" required  ></td>
             </tr>
 
             <tr>
@@ -120,7 +112,7 @@
             </tr>
 
             <tr>
-              <td>Description</td> <td><textarea name="description" style="width:200px" >${book.description}</textarea></td>
+              <td>Description</td> <td><textarea name="description" minlength="10" required style="width:200px" >${book.description}</textarea></td>
             </tr>
             <tr>
               <td>Book</td> <td><input type="file" class="button" name="file_book" ></td>
