@@ -72,6 +72,27 @@ CREATE TABLE `rating` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+
+CREATE TABLE `book_status` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `book_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `status` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `user_idx` (`user_id` ASC),
+  INDEX `book_idx` (`book_id` ASC),
+  CONSTRAINT `user_kkk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `book_kkk`
+  FOREIGN KEY (`book_id`)
+  REFERENCES `books` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
 insert into genres values(1,'History');
 insert into genres values(2,'Horror');
 insert into genres values(3,'Fantasy');
