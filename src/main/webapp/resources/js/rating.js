@@ -27,19 +27,23 @@
 //первоначальная установка и создание рейтинга 
  	function rating(onclick,selectorId,afterClick){
  		var rate = document.querySelector(selectorId);
- 		var onStar = parseInt(rate.getAttribute('value'));
- 		for(var i = 0; i < 5; i++){
- 			var input = document.createElement('input');
- 			input.type = 'image';
- 			input.value = i + 1;
- 			input.readOnly = true;
- 			if(onclick)
- 				input.onclick = function(){clickStar(this.value,rate.childNodes,afterClick);}
- 			if(i < onStar)
- 				input.src = onImage;
- 			else
- 				input.src = offImage;
- 			rate.append(input);
- 		}
+ 		if(rate != null) {
+            var onStar = parseInt(rate.getAttribute('value'));
+            for (var i = 0; i < 5; i++) {
+                var input = document.createElement('input');
+                input.type = 'image';
+                input.value = i + 1;
+                input.readOnly = true;
+                if (onclick)
+                    input.onclick = function () {
+                        clickStar(this.value, rate.childNodes, afterClick);
+                    }
+                if (i < onStar)
+                    input.src = onImage;
+                else
+                    input.src = offImage;
+                rate.append(input);
+            }
+        }
 
  	}

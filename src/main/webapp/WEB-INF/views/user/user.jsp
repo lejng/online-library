@@ -12,7 +12,6 @@
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet">
     <script src="${contextPath}/resources/js/jquery-3.2.1.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-
 </head>
 
 <body>
@@ -42,6 +41,34 @@
         </div>
     </div>
 
+</div>
+<div class="container">
+
+    <h3 style="margin-top: 10px">My books</h3>
+    <c:if test="${!empty listBooks}">
+        <c:forEach items="${listBooks}" var="book">
+                <div class="card card-block w-50" style="margin-top:20px" >
+                    <h3 class="card-title"><a href="<c:url value='/bookdata/${book.book.id}'/>" class="card-link">${book.book.name}</a></h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <figure>
+                                <c:if test="${empty book.book.imageUrl}">
+                                    <img src="${contextPath}/resources/image/book.png" height="200px" class="img-thumbnail" >
+                                </c:if>
+                                <c:if test="${!empty book.book.imageUrl}">
+                                    <img src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/image/${book.book.id}" style="height: 200px" class="img-thumbnail"  >
+                                </c:if>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="card-text"><strong>Author: </strong> ${book.book.author}</p>
+                            <p class="card-text"><strong>Genre: </strong> ${book.book.genre.genre}</p>
+                            <p class="card-text"><strong>Status: </strong> ${book.status}</p>
+                        </div>
+                    </div>
+                </div>
+        </c:forEach>
+    </c:if>
 </div>
 
 

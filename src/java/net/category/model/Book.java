@@ -38,6 +38,7 @@ public class Book  {
     @JoinColumn(name="book_id")
     private List<Rating> ratings;
 
+
     @Transient
     private float rating = - 1;
 

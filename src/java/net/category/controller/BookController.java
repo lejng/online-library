@@ -1,10 +1,8 @@
 package net.category.controller;
 
-import net.category.model.Book;
-import net.category.model.Comment;
-import net.category.model.Rating;
-import net.category.model.User;
+import net.category.model.*;
 import net.category.service.book.BookService;
+import net.category.service.bookStatus.BookStatusService;
 import net.category.service.comment.CommentService;
 import net.category.service.file.FileService;
 import net.category.service.genre.GenreService;
@@ -46,6 +44,9 @@ public class BookController {
 
     @Autowired
     private FileService fileManager;
+
+    @Autowired
+    private BookStatusService bookStatusService;
 
     @RequestMapping(value = {"/","books"}, method = RequestMethod.GET)
     public String listBooks(Model model){
@@ -152,17 +153,27 @@ public class BookController {
 
     @RequestMapping("bookdata/{id}")
     public String bookData(@PathVariable("id") int id, Model model){
+        Book book = bookService.getBookById(id);
         List<Comment> comments = commentService.findCommentsByBook(bookService.getBookById(id));
         model.addAttribute("comments",comments);
         model.addAttribute("isLogin",userService.isLogin());
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("listGenres", genreService.listGenres());
-        model.addAttribute("book", bookService.getBookById(id));
+        model.addAttribute("book",book );
         model.addAttribute("isBookData",true);
         int userRate = 0;
         if(ratingService.findByBookAndUser(bookService.getBookById(id),userService.getCurrentUser()) != null)
             userRate = (int)ratingService.findByBookAndUser(bookService.getBookById(id),userService.getCurrentUser()).getRating();
         model.addAttribute("userRate",userRate);
+        BookStatus bookStatus = bookStatusService.ByBookAndUser(book,userService.getCurrentUser());
+        if( bookStatus == null)
+            model.addAttribute("notRead","active");
+        else {
+            if (bookStatus.getStatus().equals("Read"))
+                model.addAttribute("Read","active");
+            if (bookStatus.getStatus().equals("Going to read"))
+                model.addAttribute("GoRead","active");
+        }
         return "book/bookdata";
     }
 

@@ -18,9 +18,14 @@
   <script>
     var onImage = '${contextPath}/resources/image/star-on.svg';
     var offImage = '${contextPath}/resources/image/star-off.svg';
+    var urlReadStatus = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/user/book/read/${book.id}';
+    var urlNotReadStatus = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/user/book/not_read/${book.id}';
+    var urlGoingToReadStatus = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/user/book/going_read/${book.id}';
+    var urlAddComment = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/comment/add/${book.id}';
+    var urlRate = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/rate/${book.id}';
+    setUrlForBookStatus(urlReadStatus,urlNotReadStatus,urlGoingToReadStatus);
     setImage(onImage,offImage);
-    setUrl('http://${pageContext.request.serverName}:${pageContext.request.serverPort}/comment/add/${book.id}',
-        'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/rate/${book.id}');
+    setUrl(urlAddComment,urlRate);
   </script>
 </head>
 <body>
@@ -49,6 +54,13 @@
     <h3 class="card-title">${book.name}</h3>
         <%@include file="_book.jsp" %>
   </div>
+  <c:if test="${isLogin}">
+    <div class="btn-group" role="group" aria-label="Basic example" id="book_status">
+      <button type="button" id="button_go_read" class="btn btn-secondary ${GoRead}">Going to read</button>
+      <button type="button" id="button_read" class="btn btn-secondary ${Read}">Read</button>
+      <button type="button" id="button_not_read" class="btn btn-secondary ${notRead}">Not read</button>
+    </div>
+  </c:if>
 
   <c:if test="${isLogin}">
       <p>

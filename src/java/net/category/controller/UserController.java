@@ -1,6 +1,10 @@
 package net.category.controller;
 
+import net.category.model.Book;
+import net.category.model.BookStatus;
 import net.category.model.User;
+import net.category.service.book.BookService;
+import net.category.service.bookStatus.BookStatusService;
 import net.category.service.file.FileService;
 import net.category.service.user.UserService;
 import net.category.validator.UserValidator;
@@ -8,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -28,6 +29,12 @@ public class UserController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private BookStatusService bookStatusService;
+
+    @Autowired
+    private BookService bookService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -70,6 +77,7 @@ public class UserController {
         if( user == null)
           return   "redirect:/books";
         else{
+            model.addAttribute("listBooks",bookStatusService.findByUser(userService.getCurrentUser()));
             model.addAttribute("user",user);
             model.addAttribute("isAdmin",userService.isAdmin());
             model.addAttribute("isLogin",userService.isLogin());
@@ -80,6 +88,11 @@ public class UserController {
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
     public String addBook(@ModelAttribute("user") User user,
                           @RequestParam("file_image") MultipartFile fileImage){
+        User currentUser = userService.getCurrentUser();
+        if( currentUser == null )
+            return   "redirect:/books";
+        if (currentUser.getId() != user.getId())
+            return   "redirect:/books";
         User originUser = userService.getCurrentUser();
         user.setPassword(originUser.getPassword());
         if(!fileImage.isEmpty()) {
@@ -93,5 +106,50 @@ public class UserController {
         user.setRole(originUser.getRole());
         userService.update(user);
         return "redirect:/user";
+    }
+
+    @RequestMapping(value = "user/book/read/{id}",method = RequestMethod.GET)
+    public String addReadBook(@PathVariable("id") int id){
+        BookStatus bookStatus = findByUserAndBook(id);
+        createOrUpdateBookStatus(bookStatus,"Read",id);
+        return "ok";
+    }
+
+    @RequestMapping(value = "user/book/going_read/{id}",method = RequestMethod.GET)
+    public String addGoingReadBook(@PathVariable("id") int id){
+        BookStatus bookStatus = findByUserAndBook(id);
+        createOrUpdateBookStatus(bookStatus,"Going to read",id);
+        return "ok";
+    }
+
+    @RequestMapping(value = "user/book/not_read/{id}",method = RequestMethod.GET)
+    public String notReadBook(@PathVariable("id") int id){
+        BookStatus bookStatus = findByUserAndBook(id);
+        if(bookStatus != null)
+            bookStatusService.remove(bookStatus.getId());
+        return "ok";
+    }
+
+    private void createOrUpdateBookStatus(BookStatus bookStatus,String status,int bookId){
+        if(bookStatus != null){
+            bookStatus.setStatus(status);
+            bookStatusService.update(bookStatus);
+        }else{
+            bookStatus = createBookStatus(bookId,status);
+            bookStatusService.add(bookStatus);
+        }
+    }
+
+    private BookStatus createBookStatus(int bookId,String status){
+        BookStatus bookStatus = new BookStatus();
+        bookStatus.setBook(bookService.getBookById(bookId));
+        bookStatus.setUser(userService.getCurrentUser());
+        bookStatus.setStatus(status);
+        return bookStatus;
+    }
+
+    private BookStatus findByUserAndBook(int bookId){
+        Book book = bookService.getBookById(bookId);
+        return bookStatusService.ByBookAndUser(book,userService.getCurrentUser());
     }
 }

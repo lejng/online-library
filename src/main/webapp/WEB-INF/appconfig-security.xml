@@ -10,7 +10,9 @@
     <http auto-config="true">
         <csrf disabled="true"/>
         <intercept-url pattern="/books/add" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/books/edit" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="book/remove/*" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/book/rate/*" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="/comment/add/*" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="book/rate/*" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
