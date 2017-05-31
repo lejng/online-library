@@ -87,7 +87,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
     public String addBook(@ModelAttribute("user") User user,
-                          @RequestParam("file_image") MultipartFile fileImage){
+                          @RequestParam("file_image") MultipartFile fileImage,Model model){
         User currentUser = userService.getCurrentUser();
         if( currentUser == null )
             return   "redirect:/books";
@@ -105,7 +105,8 @@ public class UserController {
         user.setEmail(originUser.getEmail());
         user.setRole(originUser.getRole());
         userService.update(user);
-        return "redirect:/user";
+        model.addAttribute("user",user);
+        return "user/_user";
     }
 
     @RequestMapping(value = "user/book/read/{id}",method = RequestMethod.GET)

@@ -26,9 +26,7 @@
             <ul class="nav float-right">
                 <%@include file="_header.jsp" %>
                 <c:if test="${isAdmin}">
-                    <button type="button" style="margin-right: 10px" class="list-group-item" data-toggle="modal" data-target="#addEditModal">
-                        Add
-                    </button>
+                    <a href="#" class="list-group-item" style="margin-right: 10px" data-toggle="modal" data-target="#addEditModal">Add</a>
                 </c:if>
             </ul>
         </nav>
@@ -48,11 +46,12 @@
                     <c:if test="${!empty listBooks}">
                             <c:forEach items="${listBooks}" var="book">
 
-                                <div class="card card-block" style="margin-top:20px" >
-                                    <h3 class="card-title"><a href="<c:url value='/bookdata/${book.id}'/>" class="card-link">${book.name}</a></h3>
-                                            <%@include file="_book.jsp" %>
+                                <div class="card" style="margin-top:20px">
+                                        <h3 class="card-header"><a href="<c:url value='/bookdata/${book.id}'/>" class="card-link">${book.name}</a></h3>
+                                    <div class="card-block">
+                                                <%@include file="_book.jsp" %>
+                                    </div>
                                 </div>
-
                             </c:forEach>
                     </c:if>
                     <c:if test="${empty listBooks}">
@@ -87,36 +86,49 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h3>Add</h3>
                 <form action="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/books/add" method="POST"  commandName="book"  id="form_add_book" enctype="multipart/form-data">
-                    <table>
-                        <tr>
-                            <td>Name</td> <td><input type="text" name="name" style="width:200px" required minlength="3" ></td>
-                        </tr>
-                        <tr>
-                            <td>Author</td> <td><input type="text" name="author" style="width:200px" required minlength="3" ></td>
-                        </tr>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Name</label>
+                        <div class="col-5">
+                            <input  class="form-control" type="text" name="name"  required minlength="3" >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Author</label>
+                        <div class="col-5">
+                            <input  class="form-control" type="text" name="author"  required minlength="3" >
+                        </div>
+                    </div>
 
-                        <tr>
-                            <td>Genre</td> <td>
-                            <select name="genre_id">
+                    <div class="form-group row">
+                        <label  class="col-2 col-form-label">Genre</label>
+                        <div class="col-5">
+                            <select name="genre_id" class="custom-select">
                                 <c:forEach items="${listGenres}" var="genre">
                                 <option value="${genre.id}">${genre.genre}</option>
                                 </c:forEach>
                             </select>
-                        </td>
-                        </tr>
+                        </div>
+                    </div>
 
-                        <tr>
-                            <td>Description</td> <td><textarea name="description" style="width:200px" required minlength="10"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>Book</td> <td><input type="file" class="button" name="file_book" required></td>
-                        </tr>
-                        <tr>
-                            <td>Image</td> <td><input type="file" class="button" name="file_image" ></td>
-                        </tr>
-                    </table>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Description</label>
+                        <div class="col-5">
+                            <textarea cols="50"  class="form-control" rows="4" name="description" required minlength="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Book</label>
+                        <div class="col-5">
+                             <input type="file" class="button" name="file_book" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Image</label>
+                        <div class="col-5">
+                            <input type="file" class="button" name="file_image" >
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

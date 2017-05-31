@@ -10,21 +10,26 @@
         </figure>
     </div>
     <div class="col-sm-6">
-        <p class="card-text"><strong>Author: </strong> ${book.author}</p>
-        <p class="card-text"><strong>Genre: </strong> ${book.genre.genre}</p>
-        <p id="book_rating"><%@include file="_rating.jsp" %></p>
-        <c:if test="${isBookData}">
-            <p class="card-text"><strong>About: </strong><br> ${book.description}</p>
-            <p>
-                <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/download/${book.id}'/>">Download</a>&nbsp; &nbsp;
-            </p>
-        </c:if>
-        <c:if test="${isBooks}">
-            <c:if test="${isAdmin}">
-                <p>
-                        <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/remove/${book.id}'/>">Delete</a>&nbsp; &nbsp;
-                </p>
-            </c:if>
-        </c:if>
+        <table class="table table-bordered">
+
+            <tr><td><strong>Author: </strong></td> <td> ${book.author}</td></tr>
+            <tr><td><strong>Genre: </strong></td> <td> ${book.genre.genre}</td></tr>
+            <tr id="book_rating"> <%@include file="_rating.jsp" %></tr>
+                <c:if test="${isBookData}">
+                    <tr><td><strong>About: </strong></td><td> ${book.description}</td></tr>
+                </c:if>
+        </table>
+                <c:if test="${isBookData}">
+                    <p>
+                        <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/download/${book.id}'/>" class="btn btn-primary">Download</a>
+                    </p>
+                </c:if>
+                <c:if test="${isBooks}">
+                    <c:if test="${isAdmin}">
+                        <p>
+                            <a href="<c:url value='http://${pageContext.request.serverName}:${pageContext.request.serverPort}/book/remove/${book.id}'/>" class="btn btn-primary">Delete</a>
+                        </p>
+                    </c:if>
+                </c:if>
     </div>
 </div>
