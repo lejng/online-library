@@ -28,16 +28,24 @@
  	function rating(onclick,selectorId,afterClick){
  		var rate = document.querySelector(selectorId);
  		if(rate != null) {
-            var onStar = parseInt(rate.getAttribute('value'));
+            this.onStar = parseInt(rate.getAttribute('value'));
             for (var i = 0; i < 5; i++) {
                 var input = document.createElement('input');
                 input.type = 'image';
                 input.value = i + 1;
                 input.readOnly = true;
-                if (onclick)
+                if (onclick) {
                     input.onclick = function () {
                         clickStar(this.value, rate.childNodes, afterClick);
+                        onStar = this.value;
+                    };
+                    input.onmouseenter = function () {
+                        clickStar(this.value, rate.childNodes);
+                    };
+                    input.onmouseleave = function () {
+                        clickStar(onStar, rate.childNodes);
                     }
+                }
                 if (i < onStar)
                     input.src = onImage;
                 else
