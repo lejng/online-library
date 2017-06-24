@@ -12,40 +12,8 @@
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet">
     <script src="${contextPath}/resources/js/jquery-3.2.1.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/user.js"></script>
 </head>
-
-<script>
-    window.onload = function(){
-        var buttonSend = document.querySelector('#button_send');
-        buttonSend.onclick = function(){
-            var form = document.forms.form_edit_user;
-            if(form.checkValidity() == false) {
-                form.reportValidity();
-                return;
-            }
-            var form = new FormData(form);
-            var req = new XMLHttpRequest();
-            var url = 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}/user/edit';
-            req.open("POST",url);
-            req.send(form);
-            req.onreadystatechange = function () {
-                if(this.readyState != 4) return;
-                if(this.status == 200){
-                    var userCard = document.querySelector('#user_card');
-                    $('#addEditModal').modal('hide');
-                    userCard.innerHTML = '';
-                    userCard.innerHTML = this.responseText;
-                }
-                if(this.status != 200) {
-                    $('#addEditModal').modal('hide');
-                    alert("can not update profile,check your internet connection");
-                    console.log("error on url " + url);
-                }
-
-            }
-        }
-    }
-</script>
 
 <body>
 <div class="container">
@@ -66,7 +34,7 @@
 <div class="container">
 
     <h3>My profile</h3>
-    <div class="card card-block w-50" style="margin-top:20px" >
+    <div class="card card-block" style="margin-top:20px" >
         <div class="row" id="user_card">
             <%@include file="_user.jsp" %>
         </div>
@@ -78,7 +46,7 @@
     <h3 style="margin-top: 10px">My books</h3>
     <c:if test="${!empty listBooks}">
         <c:forEach items="${listBooks}" var="book">
-                <div class="card w-50" style="margin-top:20px" >
+                <div class="card w-75" style="margin:auto" >
                     <h3 class="card-header"><a href="<c:url value='/bookdata/${book.book.id}'/>" class="card-link">${book.book.name}</a></h3>
                     <div class="card-block">
                         <div class="row">
@@ -117,7 +85,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form name="form_edit_user" commandName="user" id="nameform" enctype="multipart/form-data">
+                <form name="form_edit_user" commandName="user" id="nameform" enctype="multipart/form-data" action="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/user/edit">
                     <input type="hidden" value="${user.id}" name="id" id="update_dialog_id">
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Name</label>

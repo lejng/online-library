@@ -92,6 +92,25 @@ CREATE TABLE `book_status` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+ALTER TABLE `comment`
+  DROP FOREIGN KEY `book`;
+ALTER TABLE `comment`
+  ADD CONSTRAINT `book`
+FOREIGN KEY (`book_id`)
+REFERENCES `books` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `book_status`
+  DROP FOREIGN KEY `book_kkk`;
+ALTER TABLE `book_status`
+  ADD CONSTRAINT `book_kkk`
+FOREIGN KEY (`book_id`)
+REFERENCES `books` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+
 
 insert into genres values(1,'History');
 insert into genres values(2,'Horror');

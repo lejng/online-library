@@ -6,7 +6,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("UTF-8");%>
 <%response.setCharacterEncoding("UTF-8");%>
-<!doctype html>
+
 <html>
 <head>
 
@@ -19,6 +19,7 @@
 
 </head>
 <body>
+
 <div class="container">
 
     <div class="header clearfix">
@@ -46,7 +47,7 @@
                     <c:if test="${!empty listBooks}">
                             <c:forEach items="${listBooks}" var="book">
 
-                                <div class="card" style="margin-top:20px">
+                                <div class="card" style="margin-top:20px" id="${book.id}">
                                         <h3 class="card-header"><a href="<c:url value='/bookdata/${book.id}'/>" class="card-link">${book.name}</a></h3>
                                     <div class="card-block">
                                                 <%@include file="_book.jsp" %>

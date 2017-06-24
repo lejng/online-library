@@ -117,7 +117,7 @@ public class BookController {
             book.setImageUrl(content);
         }
             bookService.addBook(book);
-        return "redirect:/books";
+        return "redirect:/bookdata/" + book.getId();
     }
 
     @RequestMapping("book/remove/{id}")
