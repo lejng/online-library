@@ -4,7 +4,7 @@
   <groupId>net.category</groupId>
   <artifactId>Online_library</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>Online_library</name>
   <url>http://maven.apache.org</url>
   <properties>
